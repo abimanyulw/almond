@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Gambar dan Simpan di LocalStorage</title>
+</head>
+<body>
+    <h1>Upload Gambar dan Simpan di LocalStorage</h1>
+    
+    <input type="file" id="imageUpload" accept="image/*" />
+    <br><br>
+    <button id="saveButton">Simpan Gambar ke LocalStorage</button>
+
+    <h2>Preview Gambar:</h2>
+    <img id="imagePreview" src="" alt="Preview Gambar" style="max-width: 100%; max-height: 300px;" />
+
+    <script>
+        const imageUpload = document.getElementById('imageUpload');
+        const saveButton = document.getElementById('saveButton');
+        const imagePreview = document.getElementById('imagePreview');
+        
+        // Menangani event perubahan pada input file
+        imageUpload.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Menangani event klik pada tombol simpan
+        saveButton.addEventListener('click', function() {
+            const imageSrc = imagePreview.src;
+            if (imageSrc) {
+                localStorage.setItem('capturedImage', imageSrc);
+                alert('Gambar telah disimpan ke LocalStorage!');
+            } else {
+                alert('Pilih gambar terlebih dahulu.');
+            }
+        });
+    </script>
+</body>
+</html>
