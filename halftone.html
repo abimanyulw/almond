@@ -1,0 +1,181 @@
+<!DOCTYPE html><html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Almond Polaroid Cam</title>
+    <style>
+        @font-face {
+    font-family: 'heading';
+    src: url('heading.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'body';
+    src: url('body.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+        
+        body {color:#D6A889; background-color:#1E2A36; text-align: center; font-family: "body", sans-serif;
+  font-style: normal; margin: 0; 
+  justify-content: center; /* Center horizontally */
+}
+
+.controls {
+    text-align: center;
+    justify-content: center; /* Center horizontally */
+}
+
+  h1 {
+            font-family: "heading", serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 30px;
+        }.controls {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .controls select, .controls button {
+        font-family: "body", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-size: 20px;
+  background-color: #1E2A36;
+  border-radius: 10px;
+  color: #D6A889;
+  border: solid 2px #D6A889;
+  padding: 8px;
+    }
+
+    .canvas {
+        position: relative;
+        width: 100vw;
+        height: calc(100vw*(4/3));
+        filter: contrast(2000%);
+        overflow: hidden;
+        border: 2px solid #333;
+    }
+
+    .canvas::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: radial-gradient(circle at center, #333, #fff);
+        background-size: 1em 1em;
+    }
+
+    .canvas img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        mix-blend-mode: hard-light;
+        filter: grayscale(1) brightness(80%) contrast(150%) blur(2px);
+    }
+
+    #nextButton {
+        font-family: "body", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-size: 20px;
+  background-color: #D6A889;
+  border-radius: 10px;
+  color: #1E2A36;
+  padding: 8px;  border: none;}
+    }
+
+#info {
+    font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-size: 20px;
+  margin: 20px;
+}
+
+    #nextButton:hover {
+        font-family: "body", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-size: 20px;
+  background-color: #1E2A36;
+  border-radius: 10px;
+  color: #D6A889;
+  border: solid 2px #D6A889;
+  padding: 8px; 
+    }
+    
+</style>
+
+</head>
+<body>
+    <h1>Halftone Editor</h1>
+
+<div class="canvas" id="canvas">
+    <img id="photo" src="https://images.unsplash.com/photo-1553514029-1318c9127859?cs=tinysrgb&ixid=MnwzMjM4NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NTM5NDAxMTk&ixlib=rb-1.2.1&auto=format&auto=compress&w=1600"/>
+</div><br><br>
+<div class="controls">
+    <select id="dotSize">
+        <option value="0.40em">Extra-Small</option>
+        <option value="0.75em">Small</option>
+        <option value="1em" selected>Medium</option>
+        <option value="1.75em">Large</option>
+        <option value="2em">Extra-Large</option>
+    </select>
+<select id="filter">
+    <option value="grayscale(0) brightness(80%) contrast(150%) blur(2px)">Colorful</option>
+    <option value="grayscale(1) brightness(80%) contrast(150%) blur(2px)" selected>Grayscale</option>
+</select>
+</div>
+<div id="info"><p style="font-size: 20px; padding-right:10px; padding-left: 10px;">On this page, you can customize the halftone effect. You can change the size of the dots in the effect and modify the color effect.</p>
+<button id="nextButton" onclick="captureAndNext()">Continue</button></div>
+
+<script>
+    const photo = document.getElementById('photo');
+    const canvas = document.querySelector('.canvas');
+    const dotSizeSelect = document.getElementById('dotSize');
+    const filterSelect = document.getElementById('filter');
+    const savedImage = localStorage.getItem('capturedImage');
+    
+    if (savedImage) {
+        photo.src = savedImage;
+    } else {
+        photo.alt = "No photo captured";
+    }
+    
+    function updateDotSize() {
+        document.styleSheets[0].insertRule(`.canvas::before { background-size: ${dotSizeSelect.value} ${dotSizeSelect.value} !important; }`, document.styleSheets[0].cssRules.length);
+    }
+    
+    dotSizeSelect.addEventListener('change', updateDotSize);
+    
+    filterSelect.addEventListener('change', () => {
+        photo.style.filter = filterSelect.value;
+    });
+    
+    function captureAndNext() {
+        domtoimage.toPng(canvas)
+        .then(function (dataUrl) {
+            localStorage.setItem('capturedImage', dataUrl);
+            window.location.href = 'frame.html';
+        })
+        .catch(function (error) {
+            console.error('Error capturing canvas:', error);
+        });}
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="dom-to-image.js"></script>
+
+</body>
+</html>
