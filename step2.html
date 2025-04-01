@@ -1,0 +1,106 @@
+<!DOCTYPE html><html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Almond Polaroid Cam</title>
+   
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Yeseva+One&display=swap" rel="stylesheet">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+      />
+   <style>
+         body {color:#D6A889; background-color:#1E2A36; text-align: center; font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal; margin: 0; }
+  h1 {
+            font-family: "Yeseva One", serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 30px;
+        }
+        img { 
+            
+            border: solid 2px #D6A889; height: 80%; width: 80%; margin: 20px auto; display: block; border-radius: 0px;}
+        .buttons { margin-top: 20px; }
+        button { font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-size: 20px;
+  background-color: #D6A889;
+  border-radius: 10px;
+  color: #1E2A36;
+  padding: 8px;  border: none;}
+
+  #photo {
+    animation: fadeInLeft; /* referring directly to the animation's @keyframe declaration */
+  animation-duration: 2s; /* don't forget to set a duration! */
+  }
+
+  #decor {
+    border: none;
+    margin-top: 40px;
+  }
+ 
+        button:hover { font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-size: 20px;
+  background-color: #1E2A36;
+  border-radius: 10px;
+  color: #D6A889;
+  border: solid 2px #D6A889;
+  padding: 8px; }
+
+  p {
+            font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-size: 20px;
+  padding: 20px;
+        }
+    </style>
+
+</head>
+<body>
+    <h1>Photo Preview</h1>
+    <img id="photo" alt="Captured Photo">
+    <p>Congratulations! Your photo has been successfully taken. You can choose to download, retake, or continue using the buttons below.</p>
+    <div class="buttons">
+        <button onclick="downloadPhoto()">Download</button>
+        <button onclick="retakePhoto()">Retake</button>
+        <button onclick="framePhoto()">Next</button>
+    </div>
+    <img id="decor" src="decor.svg">
+    <script>
+        const photo = document.getElementById('photo');
+        const savedImage = localStorage.getItem('capturedImage');
+        if (savedImage) {
+            photo.src = savedImage;
+        } else {
+            photo.alt = "No photo captured";
+        }function downloadPhoto() {
+        const link = document.createElement('a');
+        link.href = savedImage;
+        link.download = 'captured_photo.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function retakePhoto() {
+        window.location.href = 'camera.html';
+    }
+    function framePhoto() {
+        window.location.href = 'frame.html';
+    }
+</script>
+
+</body>
+</html>

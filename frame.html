@@ -1,0 +1,294 @@
+<!DOCTYPE html><html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Almond Polaroid Cam</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Yeseva+One&display=swap" rel="stylesheet">
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <style>
+        body {color: #1E2A36; background-color:#D6A889; text-align: center; font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal; margin: 0; }
+        .polaroid {
+            display: inline-block;
+            padding: 10px 10px 40px;
+            background: white;
+            position: relative;
+            width: 300px;
+            height: auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .polaroid img {
+            width: 100%;
+            display: block;
+        }
+        #spotifyQrImage{
+            margin-top: 0px;
+            
+        }
+        .caption {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            font-size: 13px;
+            font-weight: bold;
+            font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+        }
+        .buttons { margin-top: 20px; }
+        #warna {
+            font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-size: 20px;
+  background-color: #D6A889;
+  border-radius: 10px;
+  color: #1E2A36;
+  border: solid 2px #1E2A36;
+  padding: 8px;
+  margin-top: 10px;
+        }
+        #warna:hover {
+            font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-size: 20px;
+  background-color: #1E2A36;
+  border-radius: 10px;
+  color: #D6A889;
+  padding: 8px;
+  border: solid 2px #1E2A36;
+        }
+        button {
+            font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-size: 20px;
+  background-color: #1E2A36;
+  border-radius: 10px;
+  color: #D6A889;
+  padding: 8px;
+  border: none;
+        }
+        button:hover {
+            font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-size: 20px;
+  background-color: #D6A889;
+  border-radius: 10px;
+  color: #1E2A36;
+  border: solid 2px #1E2A36;
+  padding: 8px;
+        }
+        
+        h2 {margin: 20px;
+            font-family: "Yeseva One", serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 30px;
+  color: #1E2A36;
+}
+
+#fullbutton {
+    margin-top: 5px;
+    width: 35vw;
+    background-color: #D6A889;
+  border-radius: 10px;
+  color: #1E2A36;
+  padding: 8px;
+  border: none;
+}
+#fullbutton:hover {
+    background-color: #1E2A36;
+  border-radius: 10px;
+  color: #D6A889;
+  border: solid 2px #D6A889;
+}
+
+#captionText, #spotifyUrl {
+    border-radius: 10px;
+  color: #D6A889;
+  font-size: 20px;
+    width: 90vw;
+    background-color: transparent;
+    border: #D6A889 solid 2px;
+    font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  text-align: center;
+  padding: 8px;
+  margin-top: 2px;
+}
+
+#bawah {
+    background-color: #1E2A36;
+    color: #D6A889;
+}
+
+    </style>
+</head>
+<body>
+    <h2>Customize Your Polaroid</h2>
+    <div class="buttons">
+        <button onclick="shopPhoto()">Shop</button>
+        <button onclick="savePhoto()">Download</button>
+        <button onclick="sharePhoto()">Share</button>
+    </div>
+    <br>
+<br>
+<div class="polaroid" id="polaroidFrame">
+    <img id="capturedImage" alt="Foto Anda">
+    <img id="spotifyQrImage" style="display:none;" alt="QR Code">
+    <div class="caption" id="caption"></div>
+</div>
+<br><br>
+<h3>Change Frame Color</h3>
+<div class="color-options">
+    <button id="warna" onclick="changeFrameColor('white')">White</button>
+    <button id="warna" onclick="changeFrameColor('#faedcb')">Cream</button>
+    <button id="warna" onclick="changeFrameColor('#c9e4de')">Mint</button>
+    <button id="warna" onclick="changeFrameColor('#c6def1')">Sky Blue</button>
+    <button id="warna" onclick="changeFrameColor('#dbcdf0')">Lavender</button>
+    <button id="warna" onclick="changeFrameColor('#f2c6de')">Pink</button>
+    <button id="warna" onclick="changeFrameColor('#f7d9c4')">Peach</button>
+    <input id="warna" type="color" onchange="changeFrameColor(this.value)" >
+</div><br>
+<div id="bawah">
+    <br>
+<h3>Enter Caption</h3>
+    <input type="text" id="captionText" placeholder="" oninput="updateCaption()">
+    <br><h3>Enter Spotify URL</h3>
+    <input type="text" id="spotifyUrl" placeholder="" oninput="updateCaption()">
+    <br><br><button id="fullbutton" onclick="generateQR()">Generate</button>
+    <br><br>
+</div>
+
+<script>
+    window.onload = function () {
+    document.getElementById("spotifyQrImage").src = ""; // Pastikan elemen bisa diakses
+};
+
+    const imageData = localStorage.getItem('capturedImage');
+    if (imageData) {
+        document.getElementById('capturedImage').src = imageData;
+    } else {
+        alert("Tidak ada foto ditemukan!");
+        window.location.href = "index.html";
+    }
+
+    function shopPhoto() {
+        const element = document.getElementById('polaroidFrame');
+    const img = document.getElementById('capturedImage');
+
+    // Cek apakah gambar sudah dimuat
+    if (img.complete && img.naturalWidth !== 0) {
+        // Jika gambar sudah dimuat, lanjutkan dengan html2canvas
+        html2canvas(element, { useCORS: true, allowTaint: true }).then(canvas => {
+            const imageData = canvas.toDataURL('image/png');
+            localStorage.setItem('capturedImage', imageData);
+        window.location.href = 'shop.html';
+        });
+    } else {
+        alert("Foto belum dimuat, coba lagi setelah beberapa saat.");
+    }
+    }
+
+    function savePhoto() {
+        const element = document.getElementById('polaroidFrame');
+    const img = document.getElementById('capturedImage');
+
+    // Cek apakah gambar sudah dimuat
+    if (img.complete && img.naturalWidth !== 0) {
+        // Jika gambar sudah dimuat, lanjutkan dengan html2canvas
+        html2canvas(element, { useCORS: true, allowTaint: true }).then(canvas => {
+            let link = document.createElement('a');
+            link.href = canvas.toDataURL('image/png');
+            link.download = 'polaroid.png';
+            link.click();
+            Swal.fire({
+  position: "top-end",
+  icon: "success",
+  title: "Your photo has been downloaded",
+  showConfirmButton: false,
+  timer: 2500
+});
+        });
+    } else {
+        alert("Foto belum dimuat, coba lagi setelah beberapa saat.");
+    }
+}
+    
+
+    function sharePhoto() {
+        const element = document.getElementById('polaroidFrame');
+        html2canvas(element, { useCORS: true }).then(canvas => {
+            canvas.toBlob(blob => {
+                const file = new File([blob], "polaroid.png", { type: "image/png" });
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                    navigator.share({ files: [file], title: "Polaroid Photo" });
+                } else {
+                    alert("Fitur berbagi tidak didukung di browser ini.");
+                }
+            });
+        });
+    }
+
+    function changeFrameColor(color) {
+        document.getElementById('polaroidFrame').style.background = color;
+    }
+
+    function updateCaption() {
+        document.getElementById('caption').innerText = document.getElementById('captionText').value;
+    }
+
+    function extractSpotifyURI(url) {
+            const match = url.match(/https:\/\/open\.spotify\.com\/(track|album|playlist)\/(\w+)/);
+            return match ? `spotify:${match[1]}:${match[2]}` : null;
+        }
+        
+        function generateQR() {
+            const qrImage = document.getElementById("spotifyQrImage");
+            if (!qrImage) {
+                console.error("Elemen dengan ID 'spotifyQrImage' tidak ditemukan!");
+                return;
+            }
+
+            const urlInput = document.getElementById("spotifyUrl").value;
+            const spotifyURI = extractSpotifyURI(urlInput);
+
+            if (!spotifyURI) {
+                alert("URL tidak valid!");
+                return;
+            }
+
+            const qrUrl = `https://scannables.scdn.co/uri/plain/jpeg/FFFFFF/black/640/${spotifyURI}`;
+
+          qrImage.src = qrUrl;
+         qrImage.style.display = "block";
+         
+         
+        }
+    
+
+</script>
+
+</body>
+</html>

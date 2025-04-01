@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <head>
+        <title>Almond Polaroid Cam</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Yeseva+One&display=swap" rel="stylesheet">
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
+<style>
+    body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #1E2A36;
+            color: #D6A889;
+            padding: 8px;
+        }
+       div {
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            font-family: "Yeseva One", serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 40px;
+        }
+        p {
+            font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-size: 20px;
+        }
+        span {
+            font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-size: 20px;
+  background-color: #D6A889;
+  border-radius: 10px;
+  color: #1E2A36;
+  padding: 8px;
+        }
+        span:hover {
+            font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-size: 20px;
+  background-color: #1E2A36;
+  border-radius: 10px;
+  color: #D6A889;
+  border: solid 2px #D6A889;
+  padding: 8px;
+        }
+        img { border: none; height: 30%; width: 30%; margin: 20px auto; display: block; border-radius: 0px;}
+</style>
+
+    </head>
+<body>
+<div>
+    <img src="decor1.svg">
+<h1>Almond Polaroid Cam</h1>
+<p><strong>How to Use:</strong><br>
+
+    1) Tap "Start Camera" below to go to the camera page.
+    
+    <br>2) Take a photo by pressing the "Take Photo" button (the countdown is 5 seconds). You can select an aesthetic filter at the bottom of the camera.
+    
+    <br>3) After the countdown ends, you will be redirected to the photo preview page. You can choose to proceed or retake the photo.
+    
+    <br>4) Once you choose to proceed, you will be taken to the frame customization page. Follow the available instructions.</p><br>
+<span id="startButton">Start Camera</span>
+<script>
+    document.getElementById("startButton").addEventListener("click", function() {
+        window.location.href = "camera.html";
+    });
+</script>
+</div>
+</body>
+</html>
