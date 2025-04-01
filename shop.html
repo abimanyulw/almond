@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <head>
+        <title>Almond Polaroid Cam</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Yeseva+One&display=swap" rel="stylesheet">
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+    
+    body {
+            
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #1E2A36;
+            color: #D6A889;
+            padding: 8px;
+        }
+       div {
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            font-family: "Yeseva One", serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 40px;
+        }
+        p {
+            font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-size: 20px;
+        }
+        span {
+            font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-size: 20px;
+  background-color: #D6A889;
+  border-radius: 10px;
+  color: #1E2A36;
+  padding: 8px;
+  width: 50%;
+        }
+        span:hover {
+            font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: <weight>;
+  font-style: normal;
+  font-size: 20px;
+  background-color: #1E2A36;
+  border-radius: 10px;
+  color: #D6A889;
+  border: solid 2px #D6A889;
+  padding: 8px;
+        }
+        img { 
+            
+            border: solid 2px #D6A889; height: 80%; width: 80%; margin: 20px auto; display: block; border-radius: 0px;}
+
+            #product{
+                width: 100%;
+                border: 2px solid #D6A889;
+                padding: 3px;
+            }
+
+            h2{
+                font-family: "Yeseva One", serif;
+  font-weight: 400;
+  font-style: normal;
+            }
+
+            #product-p {
+                font-size: 20px;
+                margin-right: 8px;
+                margin-left: 8px;
+            }
+</style>
+
+    </head>
+<body>
+<div>
+    <img id="photo">
+<h1>Print Your Polaroid</h1>
+<p><strong>How to Print:</strong><br>
+   Select the desired print product.
+
+    Tap "Buy Product" to choose the product.
+    
+    Fill out the order form as instructed.
+    
+    You will be contacted by an admin to proceed with the payment.<br>
+</p>
+<div id="product.chose">
+    <div id="product" onclick="development()">
+        <h2>Keychain</h2>
+        <p id="product-p">The finishing process enhances the acrylic keychain, making it smoother, clearer, and more refined, resulting in a unique and elegant design. It features 6mm thick acrylic with double-sided printing and a high-quality metal keyring.</p>
+    <span>Rp10.000,00</span><br><br>
+    </div><br>
+    <div id="product" development()>
+        <h2>Photo Paper</h2>
+        <p id="product-p">We print photos with the highest quality using 260gsm art carton material, ensuring a thick, durable, and premium feel. The vibrant colors and sharp details make every print stand out beautifully.</p>
+    <span>Rp3.000,00</span><br><br>
+    </div>
+</div>
+<script>
+
+const photo = document.getElementById('photo');
+        const savedImage = localStorage.getItem('capturedImage');
+        if (savedImage) {
+            photo.src = savedImage;
+        } else {
+            photo.alt = "No photo captured";
+        }function downloadPhoto() {
+        const link = document.createElement('a');
+        link.href = savedImage;
+        link.download = 'captured_photo.png';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function development(){
+        Swal.fire({
+  title: "Sorry",
+  text: "Shop is under development.",
+  icon: "warning"
+});
+    }
+    
+</script>
+</div>
+</body>
+</html>
