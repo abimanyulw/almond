@@ -100,8 +100,8 @@ video, canvas { width: 100vw; height:calc(100vw*(4/3));  object-fit: cover;}
             if (currentStream) {
                 currentStream.getTracks().forEach(track => track.stop());
             }
-            const constraints = { video: { facingMode: useFrontCamera ? 'user' : 'environment', width: 768,
-            height: 1024 } };
+            const constraints = { video: { facingMode: useFrontCamera ? 'user' : 'environment', width: 1024,
+            height: 768 } };
             const stream = await navigator.mediaDevices.getUserMedia(constraints);
             currentStream = stream;
             video.srcObject = stream;
