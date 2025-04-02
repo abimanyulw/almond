@@ -83,6 +83,9 @@ video, canvas { width: 100vw; height:calc(100vw*(4/3));  object-fit: cover;}
     <div class="controls">
         <button onclick="toggleCamera()">Switch Camera</button>
         <button onclick="startCaptureTimer()">Take Photo</button>
+        <input type="file" id="imageUpload" accept="image/*" style="display: none;" onchange="handleImageUpload(event)">
+<button onclick="document.getElementById('imageUpload').click();">Upload Image</button>
+
     </div><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br></span>
     <div class="filters-container">
         <div class="filters" id="filterPreviews"></div>
@@ -173,6 +176,17 @@ video, canvas { width: 100vw; height:calc(100vw*(4/3));  object-fit: cover;}
         localStorage.setItem('capturedImage', imageData);
         window.location.href = 'step2.html';
     }
+function handleImageUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            localStorage.setItem('capturedImage', e.target.result);
+            window.location.href = 'step2.html';
+        };
+        reader.readAsDataURL(file);
+    }
+}
 
     function generateFilterPreviews() {
         Object.keys(filters).forEach(filter => {
