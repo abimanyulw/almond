@@ -174,14 +174,16 @@
 #stickerSelector {
   overflow-x: auto;
   overflow-y: hidden;
-  white-space: nowrap;
+  width: 100%;
   padding: 10px;
 }
 
-.sticker-scroll {
+#stickerScrollContainer {
   display: flex;
+  flex-direction: row;
   flex-wrap: nowrap;
   gap: 10px;
+  width: max-content;
 }
 
 .sticker-option {
@@ -232,7 +234,7 @@
 <br>
 <h3>Choose Sticker (Optional)</h3>
 <div id="stickerSelector">
-    <div class="sticker-scroll" id="stickerContainer">
+    <div class="sticker-scroll" id="stickerScrollContainer">
   <img src="stickers/sticker1.png" class="sticker-option" onclick="selectSticker(this)">
   <img src="stickers/sticker2.png" class="sticker-option" onclick="selectSticker(this)">
   <img src="stickers/sticker3.png" class="sticker-option" onclick="selectSticker(this)">
