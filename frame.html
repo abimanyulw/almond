@@ -176,11 +176,11 @@
   overflow-y: hidden;
   white-space: nowrap;
   padding: 10px;
-  margin: 10px 0;
 }
 
 .sticker-scroll {
-  display: inline-flex;
+  display: flex;
+  flex-wrap: nowrap;
   gap: 10px;
 }
 
@@ -188,13 +188,14 @@
   width: 60px;
   height: auto;
   cursor: pointer;
-  transition: transform 0.2s ease;
   flex-shrink: 0;
+  transition: transform 0.2s ease;
 }
 
 .sticker-option:hover {
   transform: scale(1.2);
 }
+
     </style>
 </head>
 <body>
@@ -231,6 +232,7 @@
 <br>
 <h3>Choose Sticker (Optional)</h3>
 <div id="stickerSelector">
+    <div class="sticker-scroll" id="stickerContainer">
   <img src="stickers/sticker1.png" class="sticker-option" onclick="selectSticker(this)">
   <img src="stickers/sticker2.png" class="sticker-option" onclick="selectSticker(this)">
   <img src="stickers/sticker3.png" class="sticker-option" onclick="selectSticker(this)">
@@ -242,7 +244,7 @@
 <img src="stickers/sticker9.png" class="sticker-option" onclick="selectSticker(this)">
 <img src="stickers/sticker10.png" class="sticker-option" onclick="selectSticker(this)">
 <img src="stickers/sticker11.png" class="sticker-option" onclick="selectSticker(this)">
-<img src="stickers/sticker12.png" class="sticker-option" onclick="selectSticker(this)">
+<img src="stickers/sticker12.png" class="sticker-option" onclick="selectSticker(this)"></div>
 </div>
     <br>
 <h3>Enter Caption</h3>
