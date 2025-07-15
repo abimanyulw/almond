@@ -151,9 +151,14 @@
     margin-bottom: 20px;
 }
 .sticker-option {
-    cursor: pointer;
-    transition: transform 0.2s ease;
+  height: 60px;
+  width: auto;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+  object-fit: contain;
 }
+
 .sticker-option:hover {
     transform: scale(1.2);
 }
@@ -228,8 +233,8 @@
     <input id="warna" type="color" onchange="changeFrameColor(this.value)" >
 </div><br><br><br>
 <div id="bawah">
-
-<h3>Choose Sticker (Optional)</h3><br>
+<br>
+<h3>Choose Sticker (Optional)</h3>
 <div id="stickerSelector">
     <div class="sticker-scroll" id="stickerContainer">
   <img src="stickers/sticker1.png" class="sticker-option" onclick="selectSticker(this)">
