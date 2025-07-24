@@ -37,6 +37,9 @@
   font-style: normal;
   font-size: 20px;
         }
+    #TNC{
+        font-size: 13px;
+    }
         span {
             font-family: "Josefin Sans", sans-serif;
   font-optical-sizing: auto;
@@ -78,9 +81,13 @@
     
     <br>4) Once you choose to proceed, you will be taken to the frame customization page. Follow the available instructions.</p><br>
 <span id="startButton">Start Camera</span><br><br>
+    <p id="TNC">Terms and Conditions of Usage</p>
 <script>
     document.getElementById("startButton").addEventListener("click", function() {
         window.location.href = "camera.html";
+    });
+     document.getElementById("TNC").addEventListener("click", function() {
+        window.location.href = "tnc.html";
     });
 </script>
     
