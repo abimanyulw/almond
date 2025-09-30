@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -114,6 +114,7 @@ outline: solid 2px #d2ac95;
       padding: 20px;
       border-radius: 10px;
       margin-top: 0px;
+      text-align: left;
     }
     .result h3, .result p, .start-screen p, .question {
       color: #d2ac95;
@@ -128,11 +129,11 @@ width: 50%;
 </head>
 <body>
   <header>Almond Persona</header>
-<img id="decor" src="decor1.svg">
+<img id="decor" src="decor1.svg" alt="decorative image">
   <div class="container">
     <div class="start-screen" id="start-screen">
-      <p>Temukan filter & frame Almond Polaroid Cam yang paling cocok dengan kepribadian kamu.</p>
-      <button class="btn-start" onclick="startTest()">Mulai Tes</button>
+      <p>Find the Almond Polaroid Cam filter & frame that best matches your personality.</p>
+      <button class="btn-start" onclick="startTest()">Start Test</button>
     </div>
 
     <div class="question-box" id="question-box">
@@ -145,95 +146,95 @@ width: 50%;
   </div>
 
   <script>
-    let questions = [
+    const questions = [
   {
-    pertanyaan: "Kamu paling suka menghabiskan waktu di mana?",
-    opsi: [
-      { jawaban: "Taman atau alam terbuka", tipe: "natural" },
-      { jawaban: "Kafe cantik atau galeri seni", tipe: "chic" },
-      { jawaban: "Tempat yang ramai dan seru", tipe: "vibrant" },
-      { jawaban: "Tempat nostalgia seperti toko buku lama", tipe: "nostalgic" }
+    question: "Where do you prefer to spend your time?",
+    options: [
+      { answer: "Parks or the great outdoors", type: "natural" },
+      { answer: "Cute cafés or art galleries", type: "chic" },
+      { answer: "Lively and bustling places", type: "vibrant" },
+      { answer: "Nostalgic spots like old bookstores", type: "nostalgic" }
     ]
   },
   {
-    pertanyaan: "Gaya outfit favorit kamu?",
-    opsi: [
-      { jawaban: "Simple dan bersih", tipe: "minimal" },
-      { jawaban: "Lembut dan dreamy", tipe: "dreamy" },
-      { jawaban: "Unik dan artistik", tipe: "artsy" },
-      { jawaban: "Kasual dan nyaman", tipe: "natural" }
+    question: "Your favorite outfit style?",
+    options: [
+      { answer: "Simple and clean", type: "minimal" },
+      { answer: "Soft and dreamy", type: "dreamy" },
+      { answer: "Unique and artistic", type: "artsy" },
+      { answer: "Casual and comfortable", type: "natural" }
     ]
   },
   {
-    pertanyaan: "Warna yang paling mencerminkan kamu?",
-    opsi: [
-      { jawaban: "Hijau daun atau coklat tanah", tipe: "natural" },
-      { jawaban: "Pink lembut atau ungu pastel", tipe: "dreamy" },
-      { jawaban: "Hitam-putih atau abu-abu", tipe: "minimal" },
-      { jawaban: "Merah terang atau kuning cerah", tipe: "vibrant" }
+    question: "Which color best represents you?",
+    options: [
+      { answer: "Leaf green or earthy brown", type: "natural" },
+      { answer: "Soft pink or pastel purple", type: "dreamy" },
+      { answer: "Black & white or gray", type: "minimal" },
+      { answer: "Bright red or sunny yellow", type: "vibrant" }
     ]
   },
   {
-    pertanyaan: "Kalau liburan, kamu pilih...",
-    opsi: [
-      { jawaban: "Gunung atau danau", tipe: "natural" },
-      { jawaban: "Pantai yang indah", tipe: "chic" },
-      { jawaban: "Festival atau konser", tipe: "vibrant" },
-      { jawaban: "Museum atau kota tua", tipe: "nostalgic" }
+    question: "If on vacation, you choose...",
+    options: [
+      { answer: "Mountains or lakes", type: "natural" },
+      { answer: "A beautiful beach", type: "chic" },
+      { answer: "A festival or concert", type: "vibrant" },
+      { answer: "A museum or old town", type: "nostalgic" }
     ]
   },
   {
-    pertanyaan: "Apa tujuan kamu memotret atau membuat konten?",
-    opsi: [
-      { jawaban: "Menangkap keindahan alam", tipe: "natural" },
-      { jawaban: "Tampil estetik dan stylish", tipe: "chic" },
-      { jawaban: "Ekspresi seni dan kreativitas", tipe: "artsy" },
-      { jawaban: "Kenangan manis yang personal", tipe: "nostalgic" }
+    question: "Why do you take photos or create content?",
+    options: [
+      { answer: "To capture nature's beauty", type: "natural" },
+      { answer: "To look aesthetic and stylish", type: "chic" },
+      { answer: "For artistic expression and creativity", type: "artsy" },
+      { answer: "For sweet personal memories", type: "nostalgic" }
     ]
   },
   {
-    pertanyaan: "Gaya dekorasi kamar kamu lebih ke...",
-    opsi: [
-      { jawaban: "Netral dan simpel", tipe: "minimal" },
-      { jawaban: "Warna pastel dan lembut", tipe: "dreamy" },
-      { jawaban: "Rame dan penuh warna", tipe: "vibrant" },
-      { jawaban: "Rustik dan bernuansa kayu", tipe: "natural" }
+    question: "Your room decoration style is more...",
+    options: [
+      { answer: "Neutral and simple", type: "minimal" },
+      { answer: "Pastel and soft", type: "dreamy" },
+      { answer: "Loud and colorful", type: "vibrant" },
+      { answer: "Rustic with wooden tones", type: "natural" }
     ]
   },
   {
-    pertanyaan: "Kamu paling sering posting apa di sosmed?",
-    opsi: [
-      { jawaban: "Foto estetik", tipe: "chic" },
-      { jawaban: "Pemandangan atau langit", tipe: "natural" },
-      { jawaban: "Momen lucu atau seru", tipe: "vibrant" },
-      { jawaban: "Quotes dan foto klasik", tipe: "nostalgic" }
+    question: "What do you usually post on social media?",
+    options: [
+      { answer: "Aesthetic photos", type: "chic" },
+      { answer: "Landscapes or sky photos", type: "natural" },
+      { answer: "Funny or exciting moments", type: "vibrant" },
+      { answer: "Quotes and classic photos", type: "nostalgic" }
     ]
   },
   {
-    pertanyaan: "Kalau disuruh pilih hobi, kamu lebih suka...",
-    opsi: [
-      { jawaban: "Jalan-jalan ke alam", tipe: "natural" },
-      { jawaban: "Menggambar atau mendesain", tipe: "artsy" },
-      { jawaban: "Menulis jurnal atau puisi", tipe: "dreamy" },
-      { jawaban: "Menata ruangan atau estetika", tipe: "chic" }
+    question: "If asked to pick a hobby, you prefer...",
+    options: [
+      { answer: "Exploring nature", type: "natural" },
+      { answer: "Drawing or designing", type: "artsy" },
+      { answer: "Writing journaling or poetry", type: "dreamy" },
+      { answer: "Styling spaces or aesthetics", type: "chic" }
     ]
   },
   {
-    pertanyaan: "Kamu lebih tertarik dengan suasana...",
-    opsi: [
-      { jawaban: "Hangat dan ceria", tipe: "vibrant" },
-      { jawaban: "Tenang dan menenangkan", tipe: "minimal" },
-      { jawaban: "Lembut dan dreamy", tipe: "dreamy" },
-      { jawaban: "Unik dan penuh karakter", tipe: "artsy" }
+    question: "Which atmosphere attracts you the most?",
+    options: [
+      { answer: "Warm and cheerful", type: "vibrant" },
+      { answer: "Calm and soothing", type: "minimal" },
+      { answer: "Soft and dreamy", type: "dreamy" },
+      { answer: "Unique and full of character", type: "artsy" }
     ]
   },
   {
-    pertanyaan: "Kalau kamu jadi filter kamera, kamu akan jadi...",
-    opsi: [
-      { jawaban: "Warna alami dan lembut", tipe: "natural" },
-      { jawaban: "Kontras dan artistik", tipe: "artsy" },
-      { jawaban: "Pastel dan dreamy", tipe: "dreamy" },
-      { jawaban: "Bold dan penuh warna", tipe: "vibrant" }
+    question: "If you were a camera filter, you would be...",
+    options: [
+      { answer: "Natural and soft tones", type: "natural" },
+      { answer: "Contrasty and artistic", type: "artsy" },
+      { answer: "Pastel and dreamy", type: "dreamy" },
+      { answer: "Bold and colorful", type: "vibrant" }
     ]
   }
 ];
@@ -249,6 +250,26 @@ width: 50%;
       artsy: 0
     };
 
+    const personaDescriptions = {
+      natural: "Natural — You love the outdoors, calm tones, and organic textures. Filters and frames that emphasize greens, earthy tones, and soft natural light suit you best. You value authenticity and simple beauty.",
+      chic: "Chic — You appreciate stylish aesthetics, elegant compositions, and modern touches. You prefer clean but fashionable filters that make portraits and interiors look curated and refined.",
+      vibrant: "Vibrant — Energetic, colorful, and playful. You enjoy bold palettes, high-energy moments, and eye-catching compositions. Filters that boost saturation and warmth flatter your content.",
+      nostalgic: "Nostalgic — Sentimental and fond of memories. You like warm, vintage vibes and soft fades. Filters that mimic film or aged photos enhance your storytelling and emotional tone.",
+      minimal: "Minimal — Clean, calm, and understated. You prefer neutral palettes, subtle contrasts, and minimal distractions. Simple, low-contrast filters and thin frames match your aesthetic.",
+      dreamy: "Dreamy — Soft, pastel, and romantic. You enjoy gentle glows, pastel hues, and whimsical touches. Filters with lowered contrast and warm highlights create an ethereal mood for your photos.",
+      artsy: "Artsy — Bold, experimental, and creative. You like strong contrasts, unconventional color grading, and textures. Artistic filters that emphasize grain, contrast, and unique color shifts fit your style."
+    };
+
+    const combo = {
+    natural: 'Filter Ocean Wave + Frame Mint',
+    chic: 'Filter Ibiza + Frame Lavender',
+    vibrant: 'Filter Sweet Sunset + Frame Peach',
+    nostalgic: 'Filter Vintage May + Frame Cream',
+    minimal: 'Filter Simple Gray + Frame White',
+    dreamy: 'Filter Warm Ice + Frame Pink',
+    artsy: 'Filter Old Wood + Frame Sky Blue'
+  };
+
     function startTest() {
       document.getElementById('start-screen').style.display = 'none';
       document.getElementById('question-box').style.display = 'block';
@@ -257,14 +278,14 @@ width: 50%;
 
     function loadQuestion() {
       const q = questions[current];
-      document.getElementById('question').textContent = q.pertanyaan;
+      document.getElementById('question').textContent = q.question;
       const opts = document.getElementById('options');
       opts.innerHTML = '';
-      q.opsi.forEach(opt => {
+      q.options.forEach(opt => {
         const btn = document.createElement('button');
-        btn.textContent = opt.jawaban;
+        btn.textContent = opt.answer;
         btn.onclick = () => {
-          scores[opt.tipe]++;
+          scores[opt.type]++;
           nextQuestion();
         };
         opts.appendChild(btn);
@@ -289,19 +310,17 @@ width: 50%;
   const res = document.getElementById('result');
   res.style.display = 'block';
   let highest = Object.entries(scores).sort((a,b) => b[1] - a[1])[0][0];
-  const combo = {
-    natural: 'Filter Ocean Wave + Frame Mint',
-    chic: 'Filter Ibiza + Frame Lavender',
-    vibrant: 'Filter Sweet Sunset + Frame Peach',
-    nostalgic: 'Filter Vintage May + Frame Cream',
-    minimal: 'Filter Simple Gray + Frame White',
-    dreamy: 'Filter Warm Ice + Frame Pink',
-    artsy: 'Filter Old Wood + Frame Sky Blue'
-  };
+
+  const description = personaDescriptions[highest] || '';
+
   res.innerHTML = `
-    <h3>Rekomendasi kamu:</h3>
-    <p>${combo[highest]}</p>
-    <button class="btn-start" onclick="window.location.href='https://proteales-web.github.io/almond/camera.html'">Lanjut ke Kamera</button>
+    <h3>Recommendation:</h3>
+    <p><strong>${combo[highest]}</strong></p>
+    <h3>Persona Explanation</h3>
+    <p>${description}</p>
+    <div style="margin-top:16px; text-align:center;">
+      <button class="btn-start" onclick="window.location.href='https://proteales-web.github.io/almond/camera.html'">Continue to Camera</button>
+    </div>
   `;
 }
   </script>
