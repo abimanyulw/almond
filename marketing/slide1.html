@@ -1,108 +1,18 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Almond Polaroid Cam Introduction</title>
-
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600&family=Yeseva+One&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      --bg: #1E2A36;
-      --accent: #D6A889;
-      --glass-border: rgba(214,168,137,0.16);
-      --max-width: 920px;
-      --radius: 16px;
-      --glass-padding: 18px;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      margin: 0;
-      padding: 12px;
-      font-family: "Josefin Sans", system-ui, sans-serif;
-      font-weight: 400;
-      background: radial-gradient(1200px 600px at 10% 10%, rgba(214,168,137,0.03), transparent 8%),
-                  linear-gradient(180deg, var(--bg), #122029 140%);
-      color: var(--accent);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    .card {
-      width: 100%;
-      max-width: var(--max-width);
-      margin: 0 auto;
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border-radius: var(--radius);
-      padding: var(--glass-padding);
-      box-shadow: 0 6px 20px rgba(2,6,10,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
-      border: 1px solid var(--glass-border);
-    }
-
-    h1 {
-      font-family: "Yeseva One", "Josefin Sans", serif;
-      font-size: 24px;
-      line-height: 1.3;
-      margin-bottom: 6px;
-      font-weight: 400;
-      text-shadow: 0 4px 12px rgba(0,0,0,0.6);
-    }
-
-    .tagline {
-      font-size: 13px;
-      font-weight: 400;
-      margin-bottom: 14px;
-      color: rgba(214,168,137,0.95);
-    }
-
-    .content p {
-      font-size: 14px;
-      margin-bottom: 16px;
-      text-align: justify;
-    }
-
-    /* Larger screen enhancements */
-    @media (min-width: 600px) {
-      body { padding: 22px; }
-      .card { padding: 28px; border-radius: 18px; }
-      h1 { font-size: 32px; }
-      .tagline { font-size: 14px; }
-      .content p { font-size: 15px; line-height: 1.7; }
-    }
-
-    @media (min-width: 900px) {
-      h1 { font-size: 36px; }
-      .content p { font-size: 16px; }
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title></title>
 </head>
+ <style>
+    /* fullscreen iframe, no UI */
+    html,body{height:100%;margin:0;background:#000}
+    img{position:fixed;inset:0;width:100%;height:100%;border:0}
+  </style>
 <body>
-  <main class="card" role="main" aria-labelledby="title">
-    <header>
-      <h1 id="title">Almond Polaroid Cam</h1>
-      <div class="tagline">Custom Polaroid • Halftone • Eco Packaging • Spotify Code</div>
-    </header>
-
-    <div class="content">
-      <p>
-        Welcome to Almond Polaroid Cam. This is a simple service for creating personalized polaroid prints that blend printed art style with digital features and sustainable materials.
-      </p>
-
-      <p>
-        You can choose camera filters, frame colors, and stickers for each print. There is a halftone option with dot sizes from extra small to extra large, and a colorful version is available. A scannable Spotify code can be added to the print for a music touch. Packaging uses recycled paper for the polaroid sheet and 3 mm MDF for small accessories.
-      </p>
-
-      <p>
-        Our core values are Comforting, Creating, and Caring. We aim to deliver a pleasant experience, encourage creative choices, and keep sustainability in mind for people and the planet.
-      </p>
-    </div>
-  </main>
+<img src"flyer.jpg">
 </body>
+
 </html>
