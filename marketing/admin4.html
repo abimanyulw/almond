@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Slide Control — Admin</title>
+  <style>
+    :root{font-family:Inter,system-ui,Arial}
+    body{margin:0;background:#0b1020;color:#e6eef8;padding:18px}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03);padding:16px;border-radius:12px;max-width:820px;margin:12px auto}
+    h1{margin:0 0 8px;font-size:20px}
+    label{display:block;margin-top:12px;font-size:13px}
+    input[type="text"], select, input[type="number"]{width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit}
+    .row{display:flex;gap:8px;margin-top:10px}
+    button{padding:10px 12px;border-radius:10px;border:0;background:#2b6cff;color:#fff;font-weight:600;cursor:pointer}
+    button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06)}
+    .muted{color:#9fb0d9;font-size:13px}
+    .status{margin-top:12px;padding:10px;border-radius:8px;background:rgba(0,0,0,0.2)}
+    .allowed{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+    .chip{padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.02);font-size:13px}
+    footer{max-width:820px;margin:18px auto;color:#9fb0d9;font-size:13px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Admin — Remote Slide Controller</h1>
+    <div class="muted">Gunakan halaman ini untuk mengatur slide yang sedang tampil di halaman user (Realtime Database path: <code>display/currentSlide</code>).</div>
+
+    <label for="selectSlide">Pilih slide (whitelist)</label>
+    <select id="selectSlide"></select>
+
+    <label for="customSlide">Atau ketikkan nama file slide (mis. slide3.html)</label>
+    <input id="customSlide" type="text" placeholder="slide3.html" />
+
+    <div class="row">
+      <button id="btnSet">Set Slide</button>
+      <button id="btnPrev" class="ghost">Previous</button>
+      <button id="btnNext" class="ghost">Next</button>
+    </div>
+
+    <label for="autoInterval">Auto-cycle interval (detik)</label>
+    <div class="row">
+      <input id="autoInterval" type="number" min="1" value="10" />
+      <button id="btnStart">Start Auto</button>
+      <button id="btnStop" class="ghost">Stop Auto</button>
+    </div>
+
+    <div class="status">
+      <div>Slide saat ini: <strong id="current">-</strong></div>
+      <div>ID koneksi DB: <span id="conn">-</span></div>
+      <div class="muted">Tips keamanan: jangan membuka halaman admin di jaringan publik tanpa autentikasi. Disarankan menambahkan Firebase Authentication & Realtime DB Rules.</div>
+    </div>
+
+    <div style="margin-top:12px">
+      <div class="muted">Allowed slides:</div>
+      <div id="allowedList" class="allowed"></div>
+    </div>
+  </div>
+
+  <footer>
+    Disediakan tanpa autentikasi — silakan minta aku tambahkan Firebase Auth (Google/Email) dan rules jika mau.
+  </footer>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
+    import { getDatabase, ref, set, onValue, get, child } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAO5qIwRZAgcJUABp0IPQSq0jUiYUjyuzg",
+      authDomain: "contohphishing-b538a.firebaseapp.com",
+      databaseURL: "https://contohphishing-b538a-default-rtdb.firebaseio.com",
+      projectId: "contohphishing-b538a",
+      storageBucket: "contohphishing-b538a.firebasestorage.app",
+      messagingSenderId: "1082073629571",
+      appId: "1:1082073629571:web:50baf6b8d562e1e6d7ecb6",
+      measurementId: "G-2S3HSYNYP1"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    try{ getAnalytics(app); }catch(e){}
+    const db = getDatabase(app);
+
+    // Whitelist slide (sama dengan user-side). Ubah sesuai file di server.
+    const allowedSlides = ['slide1.html','slide2.html','slide3.html','slide4.html','slide5.html','slide6.html','slide7.html','slide8.html'];
+
+    const selectSlide = document.getElementById('selectSlide');
+    const customSlide = document.getElementById('customSlide');
+    const btnSet = document.getElementById('btnSet');
+    const btnPrev = document.getElementById('btnPrev');
+    const btnNext = document.getElementById('btnNext');
+    const btnStart = document.getElementById('btnStart');
+    const btnStop = document.getElementById('btnStop');
+    const currentEl = document.getElementById('current');
+    const connEl = document.getElementById('conn');
+    const allowedList = document.getElementById('allowedList');
+    const autoInterval = document.getElementById('autoInterval');
+
+    // Populate selects and chips
+    allowedSlides.forEach(s => {
+      const opt = document.createElement('option'); opt.value = s; opt.textContent = s; selectSlide.appendChild(opt);
+      const chip = document.createElement('div'); chip.className = 'chip'; chip.textContent = s; allowedList.appendChild(chip);
+    });
+
+    const slideRef = ref(db, 'display/currentSlide');
+
+    // Read current slide in realtime and show
+    onValue(slideRef, (snap) => {
+      const val = snap.val();
+      currentEl.textContent = val || '-';
+    }, (err)=>{ console.error(err); });
+
+    // small helper to write
+    async function writeSlide(name){
+      if(!name) return;
+      try{
+        await set(slideRef, name);
+        console.log('Set slide ->', name);
+      }catch(err){
+        console.error('Gagal set slide:', err);
+        alert('Gagal menulis ke database: ' + (err.message || err));
+      }
+    }
+
+    btnSet.addEventListener('click', ()=>{
+      const name = (customSlide.value || selectSlide.value || '').trim();
+      if(!name) return alert('Pilih atau ketikkan nama slide.');
+      // Basic validation: hanya file dengan ekstensi .html
+      if(!/^[a-zA-Z0-9_\-]+\.html$/.test(name)){
+        if(!allowedSlides.includes(name)){
+          if(!confirm('File tidak mengikuti pola nama. Tetap kirim?')) return;
+        }
+      }
+      writeSlide(name);
+    });
+
+    // Prev / Next
+    btnPrev.addEventListener('click', async ()=>{
+      try{
+        const snap = await get(slideRef);
+        const cur = snap.exists() ? snap.val() : allowedSlides[0];
+        let idx = allowedSlides.indexOf(cur);
+        if(idx === -1) idx = 0;
+        idx = (idx - 1 + allowedSlides.length) % allowedSlides.length;
+        writeSlide(allowedSlides[idx]);
+      }catch(e){console.error(e)}
+    });
+
+    btnNext.addEventListener('click', async ()=>{
+      try{
+        const snap = await get(slideRef);
+        const cur = snap.exists() ? snap.val() : allowedSlides[0];
+        let idx = allowedSlides.indexOf(cur);
+        if(idx === -1) idx = 0;
+        idx = (idx + 1) % allowedSlides.length;
+        writeSlide(allowedSlides[idx]);
+      }catch(e){console.error(e)}
+    });
+
+    // Auto-cycle
+    let intervalId = null;
+    btnStart.addEventListener('click', ()=>{
+      const sec = Math.max(1, Number(autoInterval.value) || 10);
+      if(intervalId) clearInterval(intervalId);
+      intervalId = setInterval(async ()=>{
+        try{
+          const snap = await get(slideRef);
+          const cur = snap.exists() ? snap.val() : allowedSlides[0];
+          let idx = allowedSlides.indexOf(cur);
+          if(idx === -1) idx = 0;
+          idx = (idx + 1) % allowedSlides.length;
+          writeSlide(allowedSlides[idx]);
+        }catch(e){console.error(e)}
+      }, sec * 1000);
+    });
+    btnStop.addEventListener('click', ()=>{ if(intervalId) clearInterval(intervalId); intervalId = null; });
+
+    // Connection id / last write (optional) — get a quick timestamp from DB (not guaranteed unique)
+    // We'll read the database's /.info/serverTimeOffset if available, else show client time
+    try{
+      const infoRef = ref(db, '.info/serverTimeOffset');
+      onValue(infoRef, (s)=>{
+        const off = s.val() || 0; connEl.textContent = new Date(Date.now()+off).toLocaleString();
+      });
+    }catch(e){}
+
+  </script>
+</body>
+</html>
