@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Almond Polaroid Cam</title>
+  <style>
+    /* fullscreen iframe, no UI */
+    html,body{height:100%;margin:0;background:#000}
+    iframe{position:fixed;inset:0;width:100%;height:100%;border:0}
+  </style>
+</head>
+<body>
+  <!-- Fullscreen iframe. Admin mengatur path di Realtime DB: display/currentSlide -->
+  <iframe id="slideFrame" src="slide1.html" title="Slides" sandbox="allow-scripts allow-same-origin" allowfullscreen></iframe>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAO5qIwRZAgcJUABp0IPQSq0jUiYUjyuzg",
+      authDomain: "contohphishing-b538a.firebaseapp.com",
+      databaseURL: "https://contohphishing-b538a-default-rtdb.firebaseio.com",
+      projectId: "contohphishing-b538a",
+      storageBucket: "contohphishing-b538a.firebasestorage.app",
+      messagingSenderId: "1082073629571",
+      appId: "1:1082073629571:web:50baf6b8d562e1e6d7ecb6",
+      measurementId: "G-2S3HSYNYP1"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    try { getAnalytics(app); } catch(e){ }
+    const db = getDatabase(app);
+
+    const allowedSlides = [
+      'slide1.html','slide2.html','slide3.html','slide4.html','slide5.html','slide6.html','slide7.html','slide8.html'
+    ];
+    const defaultSlide = 'slide1.html';
+
+    const frame = document.getElementById('slideFrame');
+
+    function setSlide(name){
+      name = String(name || '').trim();
+      if(!name) name = defaultSlide;
+      console.log('[DISPLAY] request setSlide ->', name);
+      const safePattern = /^[a-zA-Z0-9_\-]+\.html$/;
+      if(!safePattern.test(name)){
+        console.warn('[DISPLAY] nama slide tidak valid, fallback ke default:', name);
+        frame.src = defaultSlide;
+        return;
+      }
+      if(!allowedSlides.includes(name)){
+        console.warn('[DISPLAY] slide diluar whitelist, fallback ke default:', name);
+        frame.src = defaultSlide;
+        return;
+      }
+      // force reload jika perlu
+      const current = new URL(frame.src, location.href).pathname.split('/').pop();
+      if(current === name){
+        // tambahkan query param untuk memaksa reload
+        frame.src = name + '?t=' + Date.now();
+      } else {
+        frame.src = name;
+      }
+    }
+
+    const slideRef = ref(db, 'display/currentSlide');
+    onValue(slideRef, (snapshot) => {
+      const val = snapshot.val();
+      setSlide(val);
+    }, (error) => {
+      console.error('[DISPLAY] Gagal membaca Realtime DB:', error);
+      frame.src = defaultSlide;
+    });
+  </script>
+</body>
+</html>
