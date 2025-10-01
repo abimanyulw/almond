@@ -15,9 +15,9 @@
       --card-padding-desktop: 24px;
       --card-padding-mobile: 12px;
       --letter-size-desktop: 42px;
-      --letter-size-mobile: 54px;
+      --letter-size-mobile: 46px; /* fixed square on mobile */
       --slot-size-desktop: 36px;
-      --slot-size-mobile: 48px;
+      --slot-size-mobile: 40px;
       --gap: 8px;
     }
 
@@ -36,7 +36,7 @@
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
       padding:12px;
-      overflow-x: hidden; /* prevent horizontal overflow */
+      overflow-x: hidden;
     }
 
     .card {
@@ -50,12 +50,11 @@
       margin: 12px 0;
     }
 
-    /* hide header/title per request */
+    /* header hidden by request */
     header { display: none; }
 
     .game { margin-top:6px; display:flex; flex-direction:column; gap:14px; }
 
-    /* word row block */
     .word-block {
       display:flex;
       gap:12px;
@@ -80,16 +79,15 @@
       display:flex;
       gap:8px;
       align-items:center;
-      flex-wrap:nowrap;
+      flex-wrap:wrap; /* allow wrap so slots won't force horizontal scroll */
       min-height:44px;
       flex: 1 1 auto;
       justify-content:flex-start;
-      min-width:0; /* prevents overflow */
-      overflow-x:auto;
-      padding-bottom:2px;
+      min-width:0;
+      padding-bottom:4px;
     }
 
-    /* letters container: desktop uses wrap flex, mobile uses grid (see media) */
+    /* letters container: desktop uses wrap flex, mobile grid */
     .letters-container {
       display:flex;
       gap:var(--gap);
@@ -152,7 +150,9 @@
       gap:10px;
       justify-content:center;
       margin-top:10px;
-      flex-wrap:wrap;
+      flex-wrap:nowrap; /* try to keep in single row */
+      overflow-x:auto;  /* allow horizontal scroll if too narrow */
+      padding-bottom:6px;
     }
 
     .btn-start {
@@ -164,8 +164,9 @@
       border-radius: 8px;
       cursor: pointer;
       font-family: 'Josefin Sans', sans-serif;
-      min-height:44px;
-      min-width:60px;
+      min-height:42px;
+      min-width:84px;
+      white-space:nowrap;
     }
     .btn-start:hover {
       background-color: #1f2a35;
@@ -183,26 +184,26 @@
       text-align:center;
     }
 
-    /* Mobile: stack and use grid for letters so they never overflow horizontally */
+    /* Mobile: use fixed-size grid cells for letters so they never stretch */
     @media (max-width:720px){
       .card { padding: var(--card-padding-mobile); max-width:520px; }
       .word-block { flex-direction:column; align-items:flex-start; gap:10px; padding:12px; }
-      .label { display:none; } /* free space */
+      .label { display:none; }
       .target { justify-content:center; gap:10px; overflow-x:auto; width:100%; min-width:0; }
       .letters-container {
         display:grid;
-        grid-template-columns: repeat(auto-fit, minmax(48px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(var(--letter-size-mobile), var(--letter-size-mobile)));
         gap:8px;
         width:100%;
         padding-left:0;
+        justify-content:start;
       }
-      .letter-btn { min-width:0; width:100%; height: var(--letter-size-mobile); font-size:18px; border-radius:10px; padding:0; margin:0; }
-      .slot { min-width: var(--slot-size-mobile); min-height: var(--slot-size-mobile); font-size:18px; border-radius:10px; }
+      .letter-btn { min-width:0; width:var(--letter-size-mobile); height:var(--letter-size-mobile); font-size:16px; border-radius:8px; padding:0; margin:0; }
+      .slot { min-width: var(--slot-size-mobile); min-height: var(--slot-size-mobile); font-size:16px; border-radius:8px; }
       .controls { justify-content:space-between; gap:8px; }
       .message { font-size:14px; padding:10px; }
     }
 
-    /* touch highlight */
     .letter-btn, .btn-start { -webkit-tap-highlight-color: rgba(0,0,0,0.15); }
   </style>
 </head>
@@ -227,7 +228,7 @@
         <div id="letters-2" class="letters-container" aria-label="letters for word 3"></div>
       </div>
 
-      <div class="controls">
+      <div class="controls" id="controls">
         <button class="btn-start" id="undoBtn" type="button">Undo</button>
         <button class="btn-start" id="resetBtn" type="button">Reset</button>
         <button class="btn-start" id="checkBtn" type="button">Check</button>
@@ -321,7 +322,7 @@
       const { wordIndex, slotIndex, btnId } = last;
       const slot = document.querySelector(`#target-${wordIndex} .slot[data-index="${slotIndex}"]`);
       if (slot) slot.textContent = '';
-      placed[wi = wordIndex][slotIndex] = null;
+      placed[wordIndex][slotIndex] = null;
       const btn = document.getElementById(btnId);
       if (btn) {
         btn.classList.remove('disabled');
@@ -332,6 +333,8 @@
 
     document.getElementById('resetBtn').addEventListener('click', () => {
       createLetterButtons();
+      // small scroll to top so user sees cleared targets on small devices
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
     document.getElementById('checkBtn').addEventListener('click', () => {
@@ -372,10 +375,10 @@
       }
     }
 
-    // initialize
+    // init
     createLetterButtons();
 
-    // on resize, keep focused item visible
+    // keep focused visible on mobile
     window.addEventListener('resize', () => {
       document.activeElement && document.activeElement.scrollIntoView && document.activeElement.scrollIntoView({behavior:'smooth', block:'center'});
     });
