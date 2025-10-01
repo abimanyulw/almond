@@ -1,1 +1,437 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feature Quiz</title>
 
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&family=Yeseva+One&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #1E2A36;
+      --accent: #D6A889;
+      --muted: rgba(214,168,137,0.08);
+      --card-pad: 14px;
+      --radius: 12px;
+      --gap: 12px;
+      --touch: 48px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      min-height:100vh;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(214,168,137,0.03), transparent 8%),
+                  linear-gradient(180deg, var(--bg), #122029 140%);
+      color:var(--accent);
+      font-family: "Josefin Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      display:flex;
+      align-items:flex-start;
+      justify-content:center;
+      padding:12px;
+      overflow-y:auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .card{
+      width:100%;
+      max-width:960px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:var(--radius);
+      padding:var(--card-pad);
+      border:1px solid rgba(214,168,137,0.12);
+      box-shadow: 0 12px 36px rgba(2,6,10,0.6);
+      margin:8px 0;
+    }
+
+    /* layout: desktop two columns, mobile stacked */
+    .layout {
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      gap: var(--gap);
+      align-items:start;
+    }
+    @media (max-width:780px){
+      .layout { grid-template-columns: 1fr; }
+    }
+
+    /* pool and boxes */
+    .pool, .box {
+      background: linear-gradient(180deg, rgba(214,168,137,0.02), transparent);
+      border-radius:10px;
+      border:1px dashed rgba(214,168,137,0.06);
+      padding:12px;
+      min-height:160px;
+    }
+
+    .pool {
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      align-items:stretch;
+    }
+
+    .box {
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      align-items:center;
+      justify-content:flex-start;
+      min-height:160px;
+    }
+
+    .box-title{
+      font-weight:700;
+      color:var(--accent);
+      font-size:15px;
+      text-align:center;
+      margin-bottom:4px;
+    }
+
+    .list {
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      width:100%;
+    }
+
+    /* item style: large touch target */
+    .item {
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:12px 14px;
+      border-radius:10px;
+      background: #d2ac95;
+      color:#1E2A36;
+      font-weight:700;
+      cursor:pointer;
+      border: 2px solid #d2ac95;
+      user-select:none;
+      min-height:var(--touch);
+      line-height:1.1;
+    }
+    .item:active { transform: translateY(1px); }
+    .item.disabled { opacity:0.48; pointer-events:auto; } /* allow tap to unplace */
+    .item.selected { box-shadow: 0 8px 20px rgba(0,0,0,0.4); transform: translateY(-3px); }
+
+    /* visual drop hint */
+    .box.drop-over { box-shadow: 0 8px 24px rgba(0,0,0,0.45); border-color: rgba(214,168,137,0.28); }
+
+    /* controls area on right */
+    .controls {
+      display:flex;
+      gap:8px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+    .btn {
+      background:transparent;
+      border:1.4px solid var(--accent);
+      color:var(--accent);
+      padding:10px 12px;
+      border-radius:999px;
+      font-weight:700;
+      cursor:pointer;
+      min-width:86px;
+      text-align:center;
+    }
+    .btn.primary {
+      background:var(--accent);
+      color:var(--bg);
+      border-color:var(--accent);
+    }
+
+    .msg {
+      margin-top:10px;
+      padding:10px;
+      border-radius:8px;
+      background: transparent;
+      color:var(--accent);
+      font-weight:700;
+      text-align:center;
+    }
+
+    /* make pool items wrap nicely on narrow pool width (desktop) */
+    @media (min-width:781px){
+      .pool .list { flex-direction:row; flex-wrap:wrap; gap:10px; }
+      .pool .item { flex: 1 1 calc(50% - 10px); min-width:150px; }
+    }
+    @media (max-width:780px){
+      .pool .list { flex-direction:column; }
+      .pool .item { width:100%; }
+    }
+  </style>
+</head>
+<body>
+  <main class="card" role="main" aria-live="polite">
+    <div class="layout">
+      <!-- pool left -->
+      <section class="pool" aria-label="statement pool">
+        <div class="list" id="poolList"></div>
+      </section>
+
+      <!-- right column: True and False boxes stacked -->
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div class="box" id="trueBox" aria-label="true box">
+          <div class="box-title">True</div>
+          <div class="list" id="trueList"></div>
+        </div>
+
+        <div class="box" id="falseBox" aria-label="false box">
+          <div class="box-title">False</div>
+          <div class="list" id="falseList"></div>
+        </div>
+
+        <div class="controls" style="margin-top:6px;">
+          <button class="btn" id="markTrue">Mark true</button>
+          <button class="btn" id="markFalse">Mark false</button>
+          <button class="btn primary" id="checkBtn">Check</button>
+          <button class="btn" id="resetBtn">Reset</button>
+        </div>
+        <div class="msg" id="message" aria-live="polite"></div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Focus only on polaroid sheet features, in English, no hyphen and no keychain mentions
+    const statements = [
+      { id: 'a1', text: 'You can add a Spotify code to a polaroid sheet', answer: true },
+      { id: 'a2', text: 'Polaroid sheet thickness is one hundred fifty gsm', answer: true },
+      { id: 'a3', text: 'Halftone dot size can be adjusted for different print looks', answer: true },
+      { id: 'a4', text: 'Polaroid sheets are naturally waterproof without coating', answer: false },
+      { id: 'a5', text: 'Polaroid sheets always include an NFC chip', answer: false },
+      { id: 'a6', text: 'Packaging uses recycled paper material for the polaroid sheet', answer: true },
+      { id: 'a7', text: 'Color cannot be adjusted after the polaroid is printed', answer: true }
+    ];
+
+    // DOM refs
+    const poolList = document.getElementById('poolList');
+    const trueBox = document.getElementById('trueBox');
+    const falseBox = document.getElementById('falseBox');
+    const trueList = document.getElementById('trueList');
+    const falseList = document.getElementById('falseList');
+    const markTrue = document.getElementById('markTrue');
+    const markFalse = document.getElementById('markFalse');
+    const checkBtn = document.getElementById('checkBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const message = document.getElementById('message');
+
+    let selectedId = null;
+
+    // build pool items
+    function buildPool(){
+      poolList.innerHTML = '';
+      statements.forEach(s => {
+        const el = document.createElement('div');
+        el.className = 'item';
+        el.id = s.id;
+        el.tabIndex = 0;
+        el.textContent = s.text;
+        el.setAttribute('role','button');
+        el.dataset.answer = s.answer ? 'true' : 'false';
+        // click/tap select
+        el.addEventListener('click', () => toggleSelect(el.id));
+        el.addEventListener('keydown', (e) => {
+          if(e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            toggleSelect(el.id);
+          }
+        });
+        // drag for desktop
+        el.draggable = true;
+        el.addEventListener('dragstart', (ev) => {
+          ev.dataTransfer.setData('text/plain', s.id);
+          ev.dataTransfer.effectAllowed = 'move';
+        });
+        // allow placed items to be tapped to unplace
+        poolList.appendChild(el);
+      });
+      clearMessage();
+      clearSelection();
+    }
+
+    // selection: toggle highlight
+    function toggleSelect(id){
+      const el = document.getElementById(id);
+      if(!el) return;
+      // if already placed (in trueList or falseList) then unplace back to pool
+      if(el.parentElement === trueList || el.parentElement === falseList){
+        unplaceToPool(el);
+        return;
+      }
+      // toggle selection
+      if(selectedId === id){
+        el.classList.remove('selected');
+        selectedId = null;
+        return;
+      }
+      // clear previous
+      clearSelection();
+      el.classList.add('selected');
+      selectedId = id;
+    }
+
+    function clearSelection(){
+      const prev = poolList.querySelector('.selected');
+      if(prev) prev.classList.remove('selected');
+      selectedId = null;
+    }
+
+    // move element to a box (trueBox or falseBox). When moved, it remains tappable to unplace.
+    function moveTo(boxList, el){
+      // ensure element exists and not duplicated
+      if(!el) return;
+      // append to list
+      boxList.appendChild(el);
+      // style to indicate placed but still tappable
+      el.classList.add('disabled');
+      el.classList.remove('selected');
+      el.draggable = false; // prevent dragging while placed (desktop)
+      clearSelection();
+    }
+
+    // unplace element back to pool
+    function unplaceToPool(el){
+      poolList.appendChild(el);
+      el.classList.remove('disabled');
+      el.draggable = true;
+      clearMessage();
+    }
+
+    // mark selected via buttons
+    function markSelectedAs(target){
+      if(!selectedId){
+        showMessage('Select a statement first', true);
+        return;
+      }
+      const el = document.getElementById(selectedId);
+      if(!el) return;
+      if(target === 'true') moveTo(trueList, el);
+      else moveTo(falseList, el);
+    }
+
+    // drag handlers for boxes
+    function handleDragOver(e){
+      e.preventDefault();
+      this.classList.add('drop-over');
+      e.dataTransfer.dropEffect = 'move';
+    }
+    function handleDragLeave(e){
+      this.classList.remove('drop-over');
+    }
+    function handleDrop(e){
+      e.preventDefault();
+      this.classList.remove('drop-over');
+      const id = e.dataTransfer.getData('text/plain');
+      const el = document.getElementById(id);
+      if(!el) return;
+      if(this.id === 'trueBox') moveTo(trueList, el);
+      else if(this.id === 'falseBox') moveTo(falseList, el);
+    }
+
+    // check answers
+    function checkAnswers(){
+      // ensure all statements placed
+      const placedCount = trueList.children.length + falseList.children.length;
+      if(placedCount !== statements.length){
+        showMessage('Place all statements in true or false before checking', true);
+        return;
+      }
+      let correct = 0;
+      statements.forEach(s => {
+        const el = document.getElementById(s.id);
+        const placedTrue = trueList.contains(el);
+        if(placedTrue === s.answer) correct++;
+      });
+      const pct = Math.round((correct / statements.length) * 100);
+      showMessage('You scored ' + correct + ' of ' + statements.length + ' correct ' + pct + ' percent', false);
+      // highlight correctness
+      highlightResults();
+    }
+
+    function highlightResults(){
+      statements.forEach(s => {
+        const el = document.getElementById(s.id);
+        // clear previous styles
+        el.style.outline = '';
+        if(!el) return;
+        const placedTrue = trueList.contains(el);
+        const isCorrect = (placedTrue === s.answer);
+        if(isCorrect){
+          el.style.outline = '3px solid rgba(46,204,113,0.18)';
+        } else {
+          el.style.outline = '3px solid rgba(255,99,99,0.16)';
+        }
+      });
+    }
+
+    function resetQuiz(){
+      buildPool();
+      trueList.innerHTML = '';
+      falseList.innerHTML = '';
+      clearMessage();
+      // reattach drop listeners (not strictly necessary)
+    }
+
+    function showMessage(txt, isError){
+      message.textContent = txt;
+      message.style.background = isError ? 'rgba(255,100,100,0.06)' : 'rgba(214,168,137,0.04)';
+      message.style.color = isError ? 'rgba(255,180,180,0.95)' : 'var(--accent)';
+      message.style.padding = '8px';
+      message.style.borderRadius = '8px';
+    }
+    function clearMessage(){
+      message.textContent = '';
+      message.style.background = 'transparent';
+      message.style.padding = '';
+    }
+
+    // events binding
+    [trueBox, falseBox].forEach(box => {
+      box.addEventListener('dragover', handleDragOver);
+      box.addEventListener('dragleave', handleDragLeave);
+      box.addEventListener('drop', handleDrop);
+      // allow tapping on empty area to clear selection
+      box.addEventListener('click', () => clearSelection());
+    });
+
+    markTrue.addEventListener('click', () => markSelectedAs('true'));
+    markFalse.addEventListener('click', () => markSelectedAs('false'));
+    checkBtn.addEventListener('click', checkAnswers);
+    resetBtn.addEventListener('click', resetQuiz);
+
+    // initialize
+    buildPool();
+
+    // accessibility: allow double tap on pool item to move it quickly to true on mobile
+    poolList.addEventListener('dblclick', (e) => {
+      const el = e.target.closest('.item');
+      if(el && !el.classList.contains('disabled')){
+        moveTo(trueList, el);
+      }
+    });
+
+    // ensure placed items remain tappable to unplace
+    // handle delegated clicks in trueList and falseList
+    [trueList, falseList].forEach(list => {
+      list.addEventListener('click', (e) => {
+        const el = e.target.closest('.item');
+        if(!el) return;
+        // unplace back to pool
+        unplaceToPool(el);
+      });
+    });
+
+    // on orientation change or resize, clear selection to avoid stuck state
+    window.addEventListener('orientationchange', () => clearSelection());
+    window.addEventListener('resize', () => clearSelection());
+  </script>
+</body>
+</html>
