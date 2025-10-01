@@ -1,91 +1,139 @@
-<!DOCTYPE html>
-<html>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <head>
-        <title>Almond Polaroid Cam</title>
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&family=Yeseva+One&display=swap" rel="stylesheet">
-<link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-  />
-<style>
-    body {
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #1E2A36;
-            color: #D6A889;
-            padding: 8px;
-        }
-       div {
-            padding: 20px;
-            text-align: center;
-        }
-        h1 {
-            font-family: "Yeseva One", serif;
-  font-weight: 400;
-  font-style: normal;
-  font-size: 40px;
-        }
-        p {
-            font-family: "Josefin Sans", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: <weight>;
-  font-style: normal;
-  font-size: 20px;
-        }
-    #TNC{
-        font-size: 13px;
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Almond Polaroid Cam Introduction</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600&family=Yeseva+One&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: #1E2A36;
+      --accent: #D6A889;
+      --muted: rgba(214,168,137,0.12);
+      --card-bg: rgba(255,255,255,0.03);
+      --glass-border: rgba(214,168,137,0.16);
+      --max-width: 920px;
+      --radius: 18px;
+      --glass-padding: 34px;
     }
-        span {
-            font-family: "Josefin Sans", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: <weight>;
-  font-style: normal;
-  font-size: 20px;
-  background-color: #D6A889;
-  border-radius: 10px;
-  color: #1E2A36;
-  padding: 8px;
-        }
-        span:hover {
-            font-family: "Josefin Sans", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: <weight>;
-  font-style: normal;
-  font-size: 20px;
-  background-color: #1E2A36;
-  border-radius: 10px;
-  color: #D6A889;
-  border: solid 2px #D6A889;
-  padding: 8px;
-        }
-        img { border: none; height: 30%; width: 30%; margin: 20px auto; display: block; border-radius: 0px;}
-</style>
 
-    </head>
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(214,168,137,0.03), transparent 8%),
+                  linear-gradient(180deg, var(--bg), #122029 140%);
+      color:var(--accent);
+      font-family: "Josefin Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      font-weight:400;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      padding:22px;
+    }
+
+    .card {
+      width:100%;
+      max-width:var(--max-width);
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:var(--radius);
+      padding:var(--glass-padding);
+      box-shadow: 0 10px 30px rgba(2,6,10,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+      border: 1px solid var(--glass-border);
+      position:relative;
+      overflow:hidden;
+    }
+
+    header{
+      display:flex;
+      gap:18px;
+      align-items:center;
+      margin-bottom:14px;
+    }
+
+    h1{
+      font-family: "Yeseva One", "Josefin Sans", Georgia, serif;
+      font-weight:400;
+      font-size:36px;
+      line-height:1.2;
+      color:var(--accent);
+      margin:0;
+      letter-spacing:0.6px;
+      text-shadow: 0 6px 18px rgba(0,0,0,0.6);
+    }
+
+    .tagline{
+      font-size:14px;
+      color:rgba(214,168,137,0.95);
+      margin-top:6px;
+      font-weight:400;
+    }
+
+    .content {
+      margin-top:18px;
+      padding:14px 18px;
+    }
+
+    p {
+      margin:0 0 18px 0;
+      color:var(--accent);
+      line-height:1.7;
+      font-size:16px;
+      font-weight:400;
+      text-align:justify;
+    }
+
+    /* Slide animations */
+    @keyframes slideInUp {
+      0% { transform: translateY(36px); opacity:0; }
+      60% { transform: translateY(-6px); opacity:1; }
+      100% { transform: translateY(0); opacity:1; }
+    }
+    @keyframes slideInLeft {
+      0% { transform: translateX(-46px); opacity:0; }
+      60% { transform: translateX(8px); opacity:1; }
+      100% { transform: translateX(0); opacity:1; }
+    }
+    .anim-title { animation: slideInLeft .7s cubic-bezier(.22,.9,.3,1) both; }
+    .anim-text { animation: slideInUp .7s .12s cubic-bezier(.22,.9,.3,1) both; }
+
+    @media (max-width:600px){
+      h1{font-size:28px}
+      .card{padding:20px}
+    }
+  </style>
+</head>
 <body>
-<div>
-    <img src="decor1.svg">
-<h1>Almond Polaroid Cam</h1>
-<p><strong>How to Use:</strong><br>
-
-    1) Tap "Start Camera" below to go to the camera page.
-    
-    <br>2) Take a photo by pressing the "Take Photo" button (the countdown is 5 seconds). You can select an aesthetic filter at the bottom of the camera.
-    
-    <br>3) After the countdown ends, you will be redirected to the photo preview page. You can choose to proceed or retake the photo.
-    
-    <br>4) Once you choose to proceed, you will be taken to the frame customization page. Follow the available instructions.</p><br>
-
-
-    <script async="async" data-cfasync="false" src="https://pl26275389.effectiveratecpm.com/f6107805013bdd67e1e141989b9268f9/invoke.js"></script>
-<div id="container-f6107805013bdd67e1e141989b9268f9"></div>
-    
-</div>
+  <main class="card" role="main" aria-labelledby="title">
    
+    <header>
+      <div class="anim-title">
+        <h1 id="title">Almond Polaroid Cam</h1>
+        <div class="tagline">Custom Polaroid • Halftone • Eco Packaging • Spotify Code</div>
+      </div>
+    </header>
+
+    <div class="content anim-text">
+      <p>
+        Welcome to Almond Polaroid Cam. This is a simple service for creating personalized polaroid prints that blend printed art style with digital features and sustainable materials.
+      </p>
+
+      <p>
+        You can choose camera filters, frame colors, and stickers for each print. There is a halftone option with dot sizes from extra small to extra large, and a colorful version is available. A scannable Spotify code can be added to the print for a music touch. Packaging uses recycled paper for the polaroid sheet and 3 mm MDF for small accessories.
+      </p>
+
+      <p>
+        Our core values are Comforting, Creating, and Caring. We aim to deliver a pleasant experience, encourage creative choices, and keep sustainability in mind for people and the planet.
+      </p>
+    </div>
+  </main>
 </body>
 </html>
