@@ -12,12 +12,13 @@
       --bg: #1E2A36;
       --accent: #D6A889;
       --muted: rgba(214,168,137,0.08);
-      --card-padding-desktop: 28px;
-      --card-padding-mobile: 14px;
+      --card-padding-desktop: 24px;
+      --card-padding-mobile: 12px;
       --letter-size-desktop: 42px;
-      --letter-size-mobile: 52px;
+      --letter-size-mobile: 54px;
       --slot-size-desktop: 36px;
       --slot-size-mobile: 48px;
+      --gap: 8px;
     }
 
     *{box-sizing:border-box}
@@ -35,30 +36,26 @@
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
       padding:12px;
+      overflow-x: hidden; /* prevent horizontal overflow */
     }
 
     .card {
       width:100%;
       max-width:820px;
       background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border-radius:18px;
+      border-radius:14px;
       padding:var(--card-padding-desktop);
       box-shadow: 0 10px 30px rgba(2,6,10,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
-      border: 1px solid rgba(214,168,137,0.16);
+      border: 1px solid rgba(214,168,137,0.12);
       margin: 12px 0;
     }
 
     /* hide header/title per request */
     header { display: none; }
 
-    .game {
-      margin-top:6px;
-      display:flex;
-      flex-direction:column;
-      gap:14px;
-    }
+    .game { margin-top:6px; display:flex; flex-direction:column; gap:14px; }
 
-    /* desktop: label left, target center, letters right */
+    /* word row block */
     .word-block {
       display:flex;
       gap:12px;
@@ -68,6 +65,7 @@
       border-radius:10px;
       border:1px dashed rgba(214,168,137,0.06);
       flex-wrap:nowrap;
+      min-width:0;
     }
 
     .label {
@@ -86,26 +84,28 @@
       min-height:44px;
       flex: 1 1 auto;
       justify-content:flex-start;
-      min-width:0; /* important to prevent overflow */
+      min-width:0; /* prevents overflow */
+      overflow-x:auto;
+      padding-bottom:2px;
     }
 
-    /* letters container */
+    /* letters container: desktop uses wrap flex, mobile uses grid (see media) */
     .letters-container {
       display:flex;
-      gap:8px;
+      gap:var(--gap);
       align-items:center;
       justify-content:flex-start;
-      flex-wrap:wrap;      /* allow wrapping */
-      max-width:320px;
+      flex-wrap:wrap;
       padding-left:6px;
       flex: 0 0 auto;
+      min-width:0;
     }
 
     .letter-btn {
       background-color: #d2ac95;
       color: #1f2a35;
       border: 2px solid #d2ac95;
-      padding: 8px 10px;
+      padding: 6px 8px;
       margin: 4px;
       border-radius: 8px;
       cursor: pointer;
@@ -118,6 +118,7 @@
       justify-content:center;
       user-select:none;
       touch-action: manipulation;
+      text-transform: uppercase;
     }
     .letter-btn:hover {
       background-color: #1f2a35;
@@ -182,20 +183,26 @@
       text-align:center;
     }
 
-    /* mobile adjustments: stack layout, full-width letters container */
+    /* Mobile: stack and use grid for letters so they never overflow horizontally */
     @media (max-width:720px){
       .card { padding: var(--card-padding-mobile); max-width:520px; }
       .word-block { flex-direction:column; align-items:flex-start; gap:10px; padding:12px; }
-      .label { display:none; } /* hide labels to free space */
-      .target { justify-content:flex-start; gap:10px; overflow:auto; width:100%; min-width:0; }
-      .letters-container { width:100%; max-width:100%; padding-left:0; gap:8px; justify-content:flex-start; }
-      .letter-btn { min-width: var(--letter-size-mobile); height: var(--letter-size-mobile); font-size:18px; border-radius:10px; padding:0 10px; margin:6px 6px; }
+      .label { display:none; } /* free space */
+      .target { justify-content:center; gap:10px; overflow-x:auto; width:100%; min-width:0; }
+      .letters-container {
+        display:grid;
+        grid-template-columns: repeat(auto-fit, minmax(48px, 1fr));
+        gap:8px;
+        width:100%;
+        padding-left:0;
+      }
+      .letter-btn { min-width:0; width:100%; height: var(--letter-size-mobile); font-size:18px; border-radius:10px; padding:0; margin:0; }
       .slot { min-width: var(--slot-size-mobile); min-height: var(--slot-size-mobile); font-size:18px; border-radius:10px; }
       .controls { justify-content:space-between; gap:8px; }
       .message { font-size:14px; padding:10px; }
     }
 
-    /* ensure good touch target on all devices */
+    /* touch highlight */
     .letter-btn, .btn-start { -webkit-tap-highlight-color: rgba(0,0,0,0.15); }
   </style>
 </head>
@@ -314,7 +321,7 @@
       const { wordIndex, slotIndex, btnId } = last;
       const slot = document.querySelector(`#target-${wordIndex} .slot[data-index="${slotIndex}"]`);
       if (slot) slot.textContent = '';
-      placed[wordIndex][slotIndex] = null;
+      placed[wi = wordIndex][slotIndex] = null;
       const btn = document.getElementById(btnId);
       if (btn) {
         btn.classList.remove('disabled');
@@ -368,7 +375,7 @@
     // initialize
     createLetterButtons();
 
-    // keep view usable when mobile keyboard or resize happens
+    // on resize, keep focused item visible
     window.addEventListener('resize', () => {
       document.activeElement && document.activeElement.scrollIntoView && document.activeElement.scrollIntoView({behavior:'smooth', block:'center'});
     });
