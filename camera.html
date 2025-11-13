@@ -11,64 +11,195 @@
     href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
   />
     <style>
-        body {background-color:#D6A889; text-align: center; font-family: "Josefin Sans", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: <weight>;
-  font-style: normal; margin: 0; }
-        h1 {margin: 10px;
-            font-family: "Yeseva One", serif;
-  font-weight: 400;
-  font-style: normal;
-  font-size: 30px;
-  color: #1E2A36;
-  
+        :root{
+  --bg-dark: #1E2A36;
+  --almond: #D6A889;
+  --accent: rgba(214,168,137,0.12);
+  --glass: rgba(255,255,255,0.04);
+  --text: #F6EDE2;
+  --muted: rgba(214,168,137,0.85);
+  --controls-gap: 12px;
+  --filters-height: 110px;
 }
 
-video, canvas { width: 100vw; height:calc(100vw*(4/3));  object-fit: cover;}
-        .filters-container { overflow-x: scroll; white-space: nowrap; padding: 10px; position: fixed; bottom: 0; left: 0; right: 0; background: #1E2A36; display: flex; }
-        .filters { display: flex; gap: 10px; justify-content: center; }
-        .filter-option { display: inline-block; cursor: pointer; }
-        .filter-option img { width: 80px; height: 60px; object-fit: cover; border-radius: 5px; border: 2px solid transparent; }
-        .filter-option span { display: block; text-align: center; font-size: 12px; color: white; margin-top: 5px; }
-        .timer-overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 50px;
-            font-weight: bold;
-            color: white;
-            background: #1e2a369d;
-            padding: 20px;
-            border-radius: 10px;
-            display: none;
-        }
-       
-        .controls { margin-top: 5px; }
-        button {
-            font-family: "Josefin Sans", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: <weight>;
-  font-style: normal;
-  font-size: 20px;
-  background-color: #1E2A36;
+/* Reset & base */
+*{box-sizing:border-box;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+html{min-height:100%; scroll-behavior:smooth;}
+body{
+  min-height:100vh;
+  margin:0;
+  padding:24px 16px calc(var(--filters-height) + 40px); /* beri ruang bawah supaya filters tidak menutup konten */
+  font-family:"Josefin Sans",sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(1000px 600px at 8% 8%, rgba(214,168,137,0.03), transparent 12%),
+    linear-gradient(180deg,#0f1620 0%, var(--bg-dark) 55%);
+  background-attachment: fixed;
+  background-size: cover;
+  -webkit-touch-callout:none; -webkit-user-select:none; user-select:none;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
+/* header/title */
+h1{
+  margin:10px 0 14px;
+  font-family:"Yeseva One",serif;
+  font-size:30px;
+  font-weight:400;
+  color:var(--almond);
+  text-align:center;
+  text-shadow:0 3px 12px rgba(0,0,0,0.45);
+}
+
+/* main camera area wrapper */
+#area { width:100%; max-width:920px; display:flex; flex-direction:column; align-items:center; gap:16px; }
+
+/* video / canvas container with 4:3 aspect using aspect-ratio */
+div[style*="position: relative"]{
+  width:100%;
+  max-width:920px;
+  aspect-ratio: 4 / 3;
+  position: relative;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow: 0 18px 50px rgba(2,6,12,0.7);
+  background: linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.06));
+}
+
+/* video & canvas fill the container */
+video, canvas {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  -webkit-transform: translateZ(0);
+}
+
+/* timer overlay */
+.timer-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(36px, 6vw, 64px);
+  font-weight:700;
+  color: var(--text);
+  background: rgba(30,42,54,0.64);
+  padding: 12px 20px;
   border-radius: 10px;
-  color: #D6A889;
-  padding: 8px;
+  display: none;
+  backdrop-filter: blur(4px);
+  text-shadow: 0 4px 18px rgba(0,0,0,0.6);
+  z-index: 20;
+}
+
+/* controls layout */
+.controls {
+  width:100%;
+  max-width:920px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:var(--controls-gap);
+  margin-top:6px;
+}
+
+/* button style */
+button {
+  font-family:"Josefin Sans",sans-serif;
+  font-weight:600;
+  font-size:18px;
+  background: linear-gradient(180deg, rgba(214,168,137,0.98), rgba(214,168,137,0.92));
+  color: var(--bg-dark);
+  padding:10px 16px;
+  border-radius:12px;
   border: none;
-        }
-        button:hover {
-            font-family: "Josefin Sans", sans-serif;
-  font-optical-sizing: auto;
-  font-weight: <weight>;
-  font-style: normal;
-  font-size: 20px;
-  background-color: #D6A889;
-  border-radius: 10px;
-  color: #1E2A36;
-  border: solid 2px #1E2A36;
-  padding: 8px;
-        }
+  cursor:pointer;
+  box-shadow: 0 10px 26px rgba(214,168,137,0.08);
+  transition: transform 140ms ease, box-shadow 140ms ease, opacity 120ms ease;
+  min-width:160px;
+}
+
+/* secondary button (upload) - dark variant */
+.controls button:nth-child(3){
+  background: var(--bg-dark);
+  color: var(--almond);
+  border-radius:10px;
+}
+
+/* hover / active */
+button:hover{ transform: translateY(-4px); box-shadow: 0 18px 40px rgba(214,168,137,0.14); }
+button:active{ transform: translateY(-1px) scale(.996); box-shadow: 0 8px 20px rgba(0,0,0,0.55); }
+button:focus{ outline: 3px solid rgba(214,168,137,0.18); outline-offset:4px; border-radius:12px; }
+
+/* hide native file input visually but keep accessible */
+input[type="file"]{ position: absolute; left:-9999px; width:1px; height:1px; opacity:0; }
+
+/* filters bar fixed at bottom */
+.filters-container{
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  height: var(--filters-height);
+  background: linear-gradient(180deg, rgba(30,42,54,0.98), rgba(30,42,54,0.95));
+  border-radius: 14px;
+  display:flex;
+  align-items:center;
+  padding: 12px;
+  box-shadow: 0 18px 50px rgba(2,6,12,0.6);
+  z-index: 60;
+  overflow: hidden;
+  border: 1px solid var(--accent);
+}
+
+/* inner scroll area */
+.filters {
+  display:flex;
+  gap:12px;
+  overflow-x:auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom:4px;
+  width:100%;
+  align-items:center;
+}
+
+/* single filter option */
+.filter-option{ display:flex; flex-direction:column; align-items:center; gap:8px; min-width:92px; cursor:pointer; }
+.filter-option img{
+  width:88px;
+  height:64px;
+  object-fit:cover;
+  border-radius:8px;
+  border: 3px solid transparent;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+.filter-option span{ font-size:12px; color: var(--text); text-align:center; white-space:nowrap; }
+
+/* active preview style will be applied by click feedback — provide focus style */
+.filter-option:focus-within img,
+.filter-option:hover img{
+  transform: translateY(-6px) scale(1.03);
+  border-color: rgba(214,168,137,0.22);
+  box-shadow: 0 14px 36px rgba(2,6,12,0.6);
+}
+
+/* small screens adjustments */
+@media (max-width:520px){
+  body{ padding:18px 12px calc(var(--filters-height) + 34px); }
+  h1{ font-size:22px; }
+  .filter-option img{ width:72px; height:54px; }
+  button{ font-size:16px; min-width:140px; padding:10px 12px; }
+  .timer-overlay{ font-size: clamp(28px, 10vw, 48px); padding:10px 14px; }
+}
+
+/* accessibility and links */
+a, a:visited { color: var(--almond); text-decoration: none; }
     </style>
 </head>
 <body>
@@ -212,3 +343,4 @@ function handleImageUpload(event) {
 
 </body>
 </html>
+
